@@ -1,0 +1,2 @@
+# Preserve the upstream brand exporter byte-for-byte.
+.agents/skills/polycorp-brand-assets/scripts/export-brand-assets.mjs

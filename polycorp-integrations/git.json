@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 3,
+  "provider": "git",
+  "toolName": "gitCli",
+  "accessTier": "core",
+  "adapter": {
+    "version": "1.0.0",
+    "mode": "native_cli",
+    "executable": "git",
+    "executableVersion": "2.50.1"
+  },
+  "skill": {
+    "id": "polycorp-git",
+    "version": "1.0.0"
+  },
+  "packages": [],
+  "packageResolutionId": null,
+  "skillProvenance": [],
+  "environmentVariables": [],
+  "implementationFiles": [],
+  "configFiles": [],
+  "migrationFiles": []
+}

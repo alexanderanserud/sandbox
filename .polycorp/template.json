@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "templateVersion": "1.4.2",
+  "framework": "nextjs-app-router",
+  "packageManager": "npm",
+  "shadcnStyle": "radix-nova"
+}
