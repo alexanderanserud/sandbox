@@ -1,85 +1,53 @@
-# Local Codex landing-page starter
+# Sandbox
 
-Open this folder as a project in Codex. In a new task, ask it to build your
-landing page and paste the company context you would normally give Polycorp.
-Attach a reference image and existing assets if you have them. Codex reads
-`AGENTS.md`, loads the three local skills, records its plan, and builds here.
+A blank Next.js landing-page starter with local Codex skills for design,
+shadcn components, and logo/favicon creation.
 
-The page is intentionally blank until that first prompt. You do not need
-`hasso-irl`, a Polycorp account, Vercel Sandbox, or separate model API credentials.
-Codex itself must be available and signed in. Supply imagery or use an available
-image-generation capability if your design needs original bitmap assets.
+## Get started
 
-## First prompt
-
-Use [FIRST-PROMPT.md](FIRST-PROMPT.md) as a copyable example, or write naturally.
-Provide your offer, audience, confirmed facts, CTA, and brand rules. Paste
-Mission/NABC context if useful. Attach a reference to follow its structure and
-art direction. No special format is required. No business or logo is bundled.
-
-## Run locally
-
-Use Node **24.x** and npm **11.11.0**. Dependencies were installed during setup;
-on another laptop or after removing `node_modules`, run `npm ci` first.
+Use **Node 24.x** and **npm 11.11.0**.
 
 ```sh
-npm run dev
+git clone https://github.com/alexanderanserud/sandbox.git
+cd sandbox
+npm ci
 ```
 
-This normally serves http://localhost:3000. If busy, use
-`npm run dev -- --port 3001`. Inspect it manually if desired; Codex must not use
-browser automation unless you ask.
+Open the folder in Codex and ask it to build your landing page. Describe the
+company, offer, audience, confirmed facts, and desired CTA. Attach a reference
+image and existing assets if you have them. Write naturally, or copy
+[FIRST-PROMPT.md](FIRST-PROMPT.md).
+
+Codex reads `AGENTS.md`, loads the local skills, records the brief in `PLAN.md`,
+and builds the site. The starter needs no service accounts or application API
+keys. Supply imagery or use an available image-generation tool if your design
+requires custom visual assets.
+
+## Preview and check
 
 ```sh
-npm run verify          # blank starter or template checks
-npm run test:local      # verifier and brand-export regression tests
-npm run verify:landing  # completed page, including brand and served icons
+npm run dev             # normally http://localhost:3000
+npm test                # starter, brand-export, and HTTP verifier tests
+npm run verify          # tests, typecheck, lint, and production build
+npm run verify:landing  # completed page, including brand and served icon checks
 ```
 
-`verify:landing` intentionally fails on the blank starter because the company's
-logo does not exist yet. After implementation it runs the brand exporter in
-read-only `--check` mode, template/type/lint/build checks, and an HTTP audit of
-`/` and Next.js icon metadata. It uses a temporary loopback port and stops its own
-server afterward. It never deploys or commits.
+If port 3000 is occupied, run `npm run dev -- --port 3001`.
 
-Codex reviews the reference structure itself. There is no independent AI reviewer.
-Automated checks do not establish pixel fidelity, responsive rendering,
-accessibility, or visual quality. Fix or report verification errors.
+The page is intentionally blank. `verify:landing` requires a company logo and
+exported icons, so run it after the first build. Its HTTP check starts and stops
+its own server on a temporary local port. The checks verify code and served
+assets; visual fidelity and responsive behavior require separate inspection.
 
-## Included skills
+## What's included
 
-All skills live inside `.agents/skills/` and travel with this project:
+- `app/` and `components/`: Next.js App Router, Tailwind 4, Nova/Radix shadcn,
+  Lucide icons, and the shared MotionReveal helper.
+- `.agents/skills/nextjs-landing-page/`: page workflow and design guidance.
+- `.agents/skills/shadcn/`: component guidance and bundled references.
+- `.agents/skills/brand-assets/`: SVG identity guidance and the icon exporter.
+- `PLAN.md`: the brief, reference outline, decisions, and verification results.
 
-- `polycorp-nextjs-vercel-website`: landing-page workflow and design constraints.
-- `shadcn`: pinned CLI, component composition, styling, and six reference files.
-- `polycorp-brand-assets`: SVG identity and the complete icon exporter.
-
-No global skill installation is needed. The root instructions explicitly load
-these files. The exporter uses this project's pinned `sharp`; run its documented
-commands from the project root.
-
-The default scope is a static landing page. The inert preview bridge and core
-integration manifests remain for contract compatibility; they do not connect
-services or trigger publishing. Edits stay in this folder.
-
-## Provenance
-
-Packaged on 2026-09-14 from clean `polycorp-ai/polycorp-shadcn-nextjs`, version
-**1.4.2**, commit `52a52980c32df5ab874bad2f493f02c55cb27e70`.
-
-Skills were exported from `hasso-irl` commit
-`5fc4cb6ca1e6c2fb9aaec53fc9c94cf8286993db`, using
-`lib/projects/website-engineer-polycorp-skills.ts`,
-`website-engineer-shadcn-skill.ts`, `website-engineer-brand-assets-skill.ts`, and
-shared `website-generation-policy.ts` (policy
-`2026-09-13-reference-structure-v1`). Those source files were unmodified at export.
-
-Local adaptations replace host tools, skill paths, preview ownership, and
-automatic Git/publication assumptions. The original brand exporter is bundled
-unchanged. The local HTTP verifier follows the host's served-icon checks without
-model-review or persistence machinery. These are provenance references, not
-runtime imports; the package is self-contained.
-
-The inherited `verify:host-integrations` command is only for upstream template
-maintenance and explicitly needs a host checkout. It is not part of local setup,
-development, or either normal verification command.
+The skills travel with the repository and use project-relative paths. Nothing
+is installed into global Codex settings. Builds stay local; hosting can be set
+up later when you choose to publish.

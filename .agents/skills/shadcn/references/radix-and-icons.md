@@ -1,4 +1,4 @@
-# Polycorp Radix and icon rules
+# Radix and icon rules
 
 The template base is fixed to Radix and the icon library is fixed to Lucide.
 

@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
-import { PolycorpPreviewBridge } from "@/components/polycorp-preview-bridge";
 
 export const metadata: Metadata = {
   title: "Website",
-  description: "A website built with Polycorp.",
+  description: "A new website.",
 };
 
 export const viewport: Viewport = {
@@ -20,10 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-svh font-sans antialiased">
-        {children}
-        <PolycorpPreviewBridge />
-      </body>
+      <body className="min-h-svh font-sans antialiased">{children}</body>
     </html>
   );
 }

@@ -17,7 +17,7 @@ const exec = promisify(execFile);
 const project = fileURLToPath(new URL("../", import.meta.url));
 const exporter = path.join(
   project,
-  ".agents/skills/polycorp-brand-assets/scripts/export-brand-assets.mjs",
+  ".agents/skills/brand-assets/scripts/export-brand-assets.mjs",
 );
 const testSvg =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="#21344a" d="M256 224h512v448L512 800 256 672V224Z"/></svg>';

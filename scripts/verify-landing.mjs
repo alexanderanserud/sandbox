@@ -237,7 +237,7 @@ export async function verifyLanding(root = projectRoot) {
     [
       path.join(
         root,
-        ".agents/skills/polycorp-brand-assets/scripts/export-brand-assets.mjs",
+        ".agents/skills/brand-assets/scripts/export-brand-assets.mjs",
       ),
       "--root",
       root,

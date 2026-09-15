@@ -1,23 +1,30 @@
 #!/usr/bin/env node
-import { createRequire } from 'node:module';
-import { lstat, mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
-import path from 'node:path';
+import { createRequire } from "node:module";
+import {
+  lstat,
+  mkdir,
+  readFile,
+  rename,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
+import path from "node:path";
 
 const SOURCE_SIZE = 1024;
 const SAFE_MARGIN = 96;
 const MAX_SVG_BYTES = 64 * 1024;
 const ICO_SIZES = [16, 32, 48, 256];
 const PUBLIC_FILES = {
-  logo: 'public/brand-assets/logo.png',
-  favicon16: 'public/brand-assets/favicon-16x16.png',
-  favicon32: 'public/brand-assets/favicon-32x32.png',
-  favicon: 'public/brand-assets/favicon.ico',
-  apple: 'public/brand-assets/apple-touch-icon.png',
+  logo: "public/brand-assets/logo.png",
+  favicon16: "public/brand-assets/favicon-16x16.png",
+  favicon32: "public/brand-assets/favicon-32x32.png",
+  favicon: "public/brand-assets/favicon.ico",
+  apple: "public/brand-assets/apple-touch-icon.png",
 };
 const APP_FILES = {
-  icon: 'app/icon.svg',
-  favicon: 'app/favicon.ico',
-  apple: 'app/apple-icon.png',
+  icon: "app/icon.svg",
+  favicon: "app/favicon.ico",
+  apple: "app/apple-icon.png",
 };
 
 function fail(message) {
@@ -25,29 +32,32 @@ function fail(message) {
 }
 
 function parseArgs(argv) {
-  const parsed = { root: process.cwd(), appleBackground: '', check: false };
+  const parsed = { root: process.cwd(), appleBackground: "", check: false };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
-    if (argument === '--root') {
-      parsed.root = argv[index + 1] || '';
+    if (argument === "--root") {
+      parsed.root = argv[index + 1] || "";
       index += 1;
-    } else if (argument === '--apple-background') {
-      parsed.appleBackground = argv[index + 1] || '';
+    } else if (argument === "--apple-background") {
+      parsed.appleBackground = argv[index + 1] || "";
       index += 1;
-    } else if (argument === '--check') {
+    } else if (argument === "--check") {
       parsed.check = true;
-    } else if (argument === '--help' || argument === '-h') {
+    } else if (argument === "--help" || argument === "-h") {
       process.stdout.write(
-        'Usage: export-brand-assets.mjs --root <project-root> --apple-background <#RRGGBB>\n',
+        "Usage: export-brand-assets.mjs --root <project-root> --apple-background <#RRGGBB>\n",
       );
       process.exit(0);
     } else {
-      fail('Unknown argument: ' + argument);
+      fail("Unknown argument: " + argument);
     }
   }
-  if (!parsed.root) fail('--root is required.');
-  if (!(parsed.check && !parsed.appleBackground) && !/^#[0-9a-f]{6}$/i.test(parsed.appleBackground)) {
-    fail('--apple-background must be a six-digit hex color such as #0F172A.');
+  if (!parsed.root) fail("--root is required.");
+  if (
+    !(parsed.check && !parsed.appleBackground) &&
+    !/^#[0-9a-f]{6}$/i.test(parsed.appleBackground)
+  ) {
+    fail("--apple-background must be a six-digit hex color such as #0F172A.");
   }
   return parsed;
 }
@@ -55,31 +65,31 @@ function parseArgs(argv) {
 async function assertRegularFile(filePath, label) {
   const stats = await lstat(filePath).catch(() => null);
   if (!stats || !stats.isFile() || stats.isSymbolicLink()) {
-    fail(label + ' must be a regular file.');
+    fail(label + " must be a regular file.");
   }
 }
 
 function validateSvg(source, byteLength) {
-  if (byteLength === 0) fail('logo.svg is empty.');
+  if (byteLength === 0) fail("logo.svg is empty.");
   if (byteLength > MAX_SVG_BYTES) {
-    fail('logo.svg exceeds the 64 KiB brand asset limit.');
+    fail("logo.svg exceeds the 64 KiB brand asset limit.");
   }
   if (/<!doctype|<!entity|<\?xml-stylesheet/i.test(source)) {
-    fail('logo.svg may not contain document types, entities, or stylesheets.');
+    fail("logo.svg may not contain document types, entities, or stylesheets.");
   }
   if (/\s(?:on[a-z]+|href|xlink:href|style)\s*=/i.test(source)) {
-    fail('logo.svg contains an unsafe event, link, or style attribute.');
+    fail("logo.svg contains an unsafe event, link, or style attribute.");
   }
   if (/javascript\s*:|data\s*:/i.test(source)) {
-    fail('logo.svg may not contain executable or embedded data URLs.');
+    fail("logo.svg may not contain executable or embedded data URLs.");
   }
 
   const openingTag = source.match(/<svg\b[^>]*>/i)?.[0];
   if (!openingTag || !/<\/svg\s*>/i.test(source)) {
-    fail('logo.svg must contain one complete svg root element.');
+    fail("logo.svg must contain one complete svg root element.");
   }
   if ((source.match(/<svg\b/gi) || []).length !== 1) {
-    fail('logo.svg must contain exactly one svg root element.');
+    fail("logo.svg must contain exactly one svg root element.");
   }
   const viewBox = openingTag.match(/\bviewBox\s*=\s*(['"])([^'"]+)\1/i)?.[2];
   const values = viewBox
@@ -100,34 +110,34 @@ function validateSvg(source, byteLength) {
   }
 
   const allowedTags = new Set([
-    'svg',
-    'g',
-    'path',
-    'rect',
-    'circle',
-    'ellipse',
-    'line',
-    'polyline',
-    'polygon',
-    'title',
-    'desc',
-    'defs',
-    'lineargradient',
-    'radialgradient',
-    'stop',
-    'clippath',
-    'mask',
+    "svg",
+    "g",
+    "path",
+    "rect",
+    "circle",
+    "ellipse",
+    "line",
+    "polyline",
+    "polygon",
+    "title",
+    "desc",
+    "defs",
+    "lineargradient",
+    "radialgradient",
+    "stop",
+    "clippath",
+    "mask",
   ]);
   for (const match of source.matchAll(/<\s*\/?\s*([A-Za-z][\w:-]*)/g)) {
     const tag = match[1].toLowerCase();
     if (!allowedTags.has(tag)) {
-      fail('logo.svg contains the unsupported <' + tag + '> element.');
+      fail("logo.svg contains the unsupported <" + tag + "> element.");
     }
   }
   for (const match of source.matchAll(/url\(([^)]+)\)/gi)) {
-    const reference = match[1].trim().replace(/^['"]|['"]$/g, '');
+    const reference = match[1].trim().replace(/^['"]|['"]$/g, "");
     if (!/^#[A-Za-z_][\w:.-]*$/.test(reference)) {
-      fail('logo.svg may reference only local gradient, clip, or mask ids.');
+      fail("logo.svg may reference only local gradient, clip, or mask ids.");
     }
   }
 }
@@ -136,15 +146,15 @@ async function loadSharp(root) {
   const bases = [...new Set([root, process.cwd()])];
   for (const base of bases) {
     try {
-      const requireFromBase = createRequire(path.join(base, 'package.json'));
-      const module = requireFromBase('sharp');
-      return module.default || module;
+      const requireFromBase = createRequire(path.join(base, "package.json"));
+      const sharpModule = requireFromBase("sharp");
+      return sharpModule.default || sharpModule;
     } catch {
       // Try the next project-local resolution base.
     }
   }
   fail(
-    'The project-local sharp package is unavailable. Run npm ci and retry; do not install an unpinned converter.',
+    "The project-local sharp package is unavailable. Run npm ci and retry; do not install an unpinned converter.",
   );
 }
 
@@ -167,7 +177,7 @@ async function assertVisibleSafeArea(sharp, png) {
       maxY = Math.max(maxY, y);
     }
   }
-  if (maxX < 0 || maxY < 0) fail('logo.svg has no visible artwork.');
+  if (maxX < 0 || maxY < 0) fail("logo.svg has no visible artwork.");
   if (
     minX < SAFE_MARGIN ||
     minY < SAFE_MARGIN ||
@@ -175,15 +185,18 @@ async function assertVisibleSafeArea(sharp, png) {
     maxY >= SOURCE_SIZE - SAFE_MARGIN
   ) {
     fail(
-      'Visible logo artwork must stay inside the 96px safe margin on its square canvas.',
+      "Visible logo artwork must stay inside the 96px safe margin on its square canvas.",
     );
   }
 }
 
 async function renderTransparent(sharp, input, size) {
-  return sharp(input, { density: 72, limitInputPixels: SOURCE_SIZE * SOURCE_SIZE * 4 })
+  return sharp(input, {
+    density: 72,
+    limitInputPixels: SOURCE_SIZE * SOURCE_SIZE * 4,
+  })
     .resize(size, size, {
-      fit: 'contain',
+      fit: "contain",
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     })
     .png({ compressionLevel: 9, adaptiveFiltering: false })
@@ -218,7 +231,7 @@ async function writeIfChanged(filePath, content) {
   const current = await readFile(filePath).catch(() => null);
   if (current?.equals(next)) return false;
   await mkdir(path.dirname(filePath), { recursive: true });
-  const temporaryPath = filePath + '.polycorp-brand-' + process.pid;
+  const temporaryPath = filePath + ".brand-" + process.pid;
   await writeFile(temporaryPath, next);
   try {
     await rename(temporaryPath, filePath);
@@ -232,25 +245,33 @@ async function writeIfChanged(filePath, content) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const root = path.resolve(args.root);
-  const packagePath = path.join(root, 'package.json');
-  const appPath = path.join(root, 'app');
-  const sourcePath = path.join(root, 'public/brand-assets/logo.svg');
-  await assertRegularFile(packagePath, 'The project package.json');
+  const packagePath = path.join(root, "package.json");
+  const appPath = path.join(root, "app");
+  const sourcePath = path.join(root, "public/brand-assets/logo.svg");
+  await assertRegularFile(packagePath, "The project package.json");
   const appStats = await lstat(appPath).catch(() => null);
   if (!appStats || !appStats.isDirectory() || appStats.isSymbolicLink()) {
-    fail('The project must contain a regular app directory.');
+    fail("The project must contain a regular app directory.");
   }
-  await assertRegularFile(sourcePath, 'public/brand-assets/logo.svg');
+  await assertRegularFile(sourcePath, "public/brand-assets/logo.svg");
 
   const svg = await readFile(sourcePath);
-  const svgText = svg.toString('utf8').replace(/^\uFEFF/, '');
+  const svgText = svg.toString("utf8").replace(/^\uFEFF/, "");
   validateSvg(svgText, svg.byteLength);
   const sharp = await loadSharp(root);
   if (args.check && !args.appleBackground) {
-    await assertRegularFile(path.join(root, PUBLIC_FILES.apple), PUBLIC_FILES.apple);
-    const { data } = await sharp(path.join(root, PUBLIC_FILES.apple)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-    if (data[3] !== 255) fail('Apple icon must use an opaque brand background.');
-    args.appleBackground = '#' + Buffer.from(data.subarray(0, 3)).toString('hex');
+    await assertRegularFile(
+      path.join(root, PUBLIC_FILES.apple),
+      PUBLIC_FILES.apple,
+    );
+    const { data } = await sharp(path.join(root, PUBLIC_FILES.apple))
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    if (data[3] !== 255)
+      fail("Apple icon must use an opaque brand background.");
+    args.appleBackground =
+      "#" + Buffer.from(data.subarray(0, 3)).toString("hex");
   }
 
   const logo = await renderTransparent(sharp, svg, SOURCE_SIZE);
@@ -273,7 +294,7 @@ async function main() {
       background: args.appleBackground,
     },
   })
-    .composite([{ input: appleMark, gravity: 'center' }])
+    .composite([{ input: appleMark, gravity: "center" }])
     .png({ compressionLevel: 9, adaptiveFiltering: false })
     .toBuffer();
 
@@ -292,7 +313,10 @@ async function main() {
     if (args.check) {
       await assertRegularFile(path.join(root, relativePath), relativePath);
       if (!(await readFile(path.join(root, relativePath))).equals(content)) {
-        fail(relativePath + ' is stale, malformed, or does not match the source mark. Rerun the brand exporter.');
+        fail(
+          relativePath +
+            " is stale, malformed, or does not match the source mark. Rerun the brand exporter.",
+        );
       }
     } else if (await writeIfChanged(path.join(root, relativePath), content)) {
       changedPaths.push(relativePath);
@@ -300,19 +324,19 @@ async function main() {
   }
   process.stdout.write(
     JSON.stringify({
-      sourcePath: 'public/brand-assets/logo.svg',
+      sourcePath: "public/brand-assets/logo.svg",
       changedPaths,
       unchanged: changedPaths.length === 0,
       outputs: outputs.map(([relativePath]) => relativePath),
-    }) + '\n',
+    }) + "\n",
   );
 }
 
 main().catch((error) => {
   process.stderr.write(
-    'Brand asset export failed: ' +
+    "Brand asset export failed: " +
       (error instanceof Error ? error.message : String(error)) +
-      '\n',
+      "\n",
   );
   process.exitCode = 1;
 });

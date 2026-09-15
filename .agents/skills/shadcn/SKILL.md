@@ -7,7 +7,7 @@ description: "Create, compose, style, or revise UI in this local Nova/Radix webs
 
 Use this skill for every website task that creates, composes, installs, styles, fixes, or reviews shadcn components.
 
-This repository owns its component source, `components.json`, and this local skill. Read `AGENTS.md` and `.polycorp/plan.md` first. Resolve references relative to this skill directory.
+This repository owns its component source, `components.json`, and this local skill. Read `AGENTS.md` and `PLAN.md` first. Resolve references relative to this skill directory.
 
 Before editing UI, read `references/workflow.md` and run the pinned project inspection command described there. Read each additional reference relevant to the requested component or interaction.
 

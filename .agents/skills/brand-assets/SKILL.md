@@ -1,9 +1,9 @@
 ---
-name: polycorp-brand-assets
+name: brand-assets
 description: "Create or preserve the company SVG logomark and export its complete favicon/icon pack for the first landing-page build or an explicit brand change in this project."
 ---
 
-# Polycorp Brand Assets
+# Brand Assets
 
 Create one original, durable company logomark and a complete Next.js icon pack. Treat the mark as the company's official visual identity: it may represent the business across the website, browser and application icons, social profiles, and future brand touchpoints. It is not decorative website artwork, a UI or feature icon, or a placeholder. Never copy a recognizable third-party logo or trace any reference pixel-for-pixel.
 
@@ -18,7 +18,7 @@ Create an original company SVG logomark suited to the company and page. The refe
 ## Brand Concept Before Drawing
 
 - Extract two or three relevant identity attributes from the company name, mission, positioning, audience, and offering. Do not merely depict a product screen, interface control, or workflow.
-- Choose one clear visual concept that expresses those attributes and is specific to the company. Record the attributes, concept, and a one-sentence rationale in `.polycorp/plan.md` before authoring the mark.
+- Choose one clear visual concept that expresses those attributes and is specific to the company. Record the attributes, concept, and a one-sentence rationale in `PLAN.md` before authoring the mark.
 
 ## Source Mark Contract
 
@@ -42,7 +42,7 @@ Create an original company SVG logomark suited to the company and page. The refe
 After writing the source SVG, run:
 
 ```bash
-node "./.agents/skills/polycorp-brand-assets/scripts/export-brand-assets.mjs" --root "$PWD" --apple-background "#0F172A"
+node "./.agents/skills/brand-assets/scripts/export-brand-assets.mjs" --root "$PWD" --apple-background "#0F172A"
 ```
 
 Replace `#0F172A` with a solid brand color that contrasts with the mark. The exporter uses the project-local `sharp` installed by the pinned Next.js template; if it is unavailable, run `npm ci` and retry instead of adding an unpinned converter.
@@ -64,12 +64,12 @@ If the exporter fails, treat its error as corrective guidance: fix the reported 
 
 - Use the same unmodified `/brand-assets/logo.svg` as the primary brand mark in the navigation and footer when those areas exist. Pair it consistently with the live company name, adequate spacing, and sufficient contrast. Do not stretch, crop, outline, shadow, or recolor it ad hoc.
 - If the company name is adjacent, use an empty image alt; otherwise use a concise brand-name alt.
-- Update `.polycorp/plan.md` with the identity attributes and rationale, source mark, export command, and generated paths.
+- Update `PLAN.md` with the identity attributes and rationale, source mark, export command, and generated paths.
 - Run the exporter before `npm run typecheck`, `npm run lint`, and `npm run build`.
 - Confirm every expected file exists and that no older custom icon metadata conflicts with the Next.js file-convention assets.
 
 For a read-only consistency check after export, run from the project root:
 
 ```bash
-node .agents/skills/polycorp-brand-assets/scripts/export-brand-assets.mjs --root "$PWD" --check
+node .agents/skills/brand-assets/scripts/export-brand-assets.mjs --root "$PWD" --check
 ```

@@ -1,30 +1,28 @@
-# Example first message to Codex
+# Example first prompt
 
-Copy the message below, replace the fields with your real context, and attach
-any reference image or brand assets. Delete fields you do not need, or write the
-same information naturally. This file is not an actual brief.
+Replace the fields below with real information, or write the same context in
+your own words. Attach a reference image and any existing logo/photos if useful.
 
 ```text
-Build my company's first landing page here. Follow AGENTS.md and the three
-bundled landing-page skills.
+Build my company's first landing page here. Follow AGENTS.md and the bundled
+landing-page, shadcn, and brand-assets skills.
 
-Company name: [name]
-What we offer: [one or two sentences]
-Target audience: [who this is for and what they need]
-Confirmed facts: [actual services/features, location, proof, or constraints]
+Company: [name]
+Offer: [what we provide]
+Audience: [who it is for and what they need]
+Confirmed facts: [actual services, features, proof, or constraints]
 Primary CTA: [desired action and real destination, if known]
-Brand preferences: [tone, colors, existing logo, or things to avoid]
+Brand preferences: [tone, colors, existing identity, or things to avoid]
 
-Additional company/Mission context:
-[paste the context you would give Polycorp]
+Additional business context:
+[paste relevant notes, positioning, or Mission/NABC context]
 
 Reference and assets:
-[describe the attached reference and any supplied logo/photos, or say there is
-no reference and ask for a compact design from the company context]
+[describe the attached reference and assets, or say there is no reference]
 
-Use the reference's section order, card counts, copy density, and CTA placement
-when I provide one. Write original concise copy using only confirmed facts.
-Record the brief and outline in .polycorp/plan.md before coding. Create or
-preserve the company mark, export the icons, and run npm run verify:landing.
-Keep this first build a static landing page. Do not use browser automation.
+When a reference is provided, preserve its section order, card counts, copy
+density, and CTA placement. Write original concise copy using confirmed facts.
+Record the brief and outline in PLAN.md, create or preserve the company mark,
+export the icon pack, and run npm run verify:landing. Keep the first build
+static and do not use browser automation.
 ```

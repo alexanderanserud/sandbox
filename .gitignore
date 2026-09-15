@@ -10,16 +10,13 @@ coverage/
 !.env.example
 *.local
 
-.polycorp/*
-!.polycorp/plan.md
-!.polycorp/template.json
 .codex/
 .agents/*
 !.agents/skills/
 .agents/skills/*
-!.agents/skills/polycorp-nextjs-vercel-website/
+!.agents/skills/nextjs-landing-page/
 !.agents/skills/shadcn/
-!.agents/skills/polycorp-brand-assets/
+!.agents/skills/brand-assets/
 
 .DS_Store
 *.log
